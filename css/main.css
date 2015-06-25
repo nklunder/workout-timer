@@ -1,0 +1,9 @@
+body {
+  text-align: center;
+  margin: 0 auto;
+}
+
+#display {
+  margin: auto;
+  width: 50%;
+}

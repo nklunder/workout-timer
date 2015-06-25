@@ -1,5 +1,5 @@
 function startCountdown(seconds) {
-  seconds = seconds * 1000;
+  seconds = seconds * 1000; // convert seconds into millisecons
   var options = {
     color: '#FCB03C',
     strokeWidth: 10,
@@ -19,9 +19,9 @@ function startCountdown(seconds) {
   circle.animate(0, function () { circle.setText("Done!");});
 }
 
-var repsInput = document.getElementById("reps")
+var repsInput = document.getElementById("reps");
 var repsBtn = document.getElementById("reps-button");
 
 repsBtn.addEventListener("click", function () {
   startCountdown(repsInput.value);
-})
+});
