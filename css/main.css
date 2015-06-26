@@ -4,6 +4,7 @@ body {
 }
 
 #display {
-  margin: auto;
+  margin: 1em auto;
   width: 50%;
+  max-width: 400px;
 }
