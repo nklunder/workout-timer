@@ -8,9 +8,29 @@ function startCountdown(seconds) {
       }
     },
     function() {
-    circle.setText("Done!");
+    circle.setText("Start next exercise!");
   });
 }
+
+
+// If not present, empty array is created to store user's workout data
+if (!localStorage.workoutData) {
+  localStorage.setItem("workoutData", JSON.stringify([]));
+}
+var workoutData = JSON.parse(localStorage.getItem("workoutData"));
+
+var todaysWorkout = {
+  date: Date.now(),
+  exercises: [
+    //  {
+    //    set: 1,
+    //    type: "push up",
+    //    reps: 25,
+    //    time: 45
+    //  }
+  ],
+  totalTime: null
+};
 
 var circle = new ProgressBar.Circle('#display', {
   fill: "#DADADA",
@@ -27,6 +47,5 @@ var repsForm = document.getElementById("reps-form");
 repsForm.addEventListener("submit", function (e) {
   e.preventDefault();
   var repsInput = document.getElementById("reps-input");
-  alert(repsInput.value);
   startCountdown(repsInput.value);
 });
