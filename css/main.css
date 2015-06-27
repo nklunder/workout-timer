@@ -1,14 +1,4 @@
-body {
-  text-align: center;
-  margin: 0 auto;
-}
-
 #countdown-display {
-  margin: 1em auto;
-  width: 25%;
-}
-
-fieldset {
-  margin: 0 auto;
+  margin: 1em 0;
   width: 25%;
 }

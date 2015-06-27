@@ -19,6 +19,9 @@ if (!localStorage.workoutData) {
 }
 var workoutData = JSON.parse(localStorage.getItem("workoutData"));
 
+var exerciseStartTime,
+    exerciseEndTime;
+
 var todaysWorkout = {
   date: Date.now(),
   exercises: [
