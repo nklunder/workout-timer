@@ -32,7 +32,7 @@ var todaysWorkout = {
   totalTime: null
 };
 
-var circle = new ProgressBar.Circle('#display', {
+var circle = new ProgressBar.Circle('#countdown-display', {
   fill: "#DADADA",
   color: '#FCB03C',
   strokeWidth: 4,
