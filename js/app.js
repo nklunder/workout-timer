@@ -25,27 +25,31 @@ if (!localStorage.workoutData) {
 var workoutData = JSON.parse(localStorage.getItem("workoutData"));
 
 var restTimer = new ProgressBar.Circle("#countdown-display", {
-  fill: "#DADADA",
   color: '#FCB03C',
   strokeWidth: 4,
   trailColor: "#C1C1C1",
-  trailWidth: 2,
+  trailWidth: 4,
   text: {
     value: '0'
   }
 });
 
 // initially hide everything but the first module
-repsForm.style.display = "none";
-restTimerDisplay.style.display = "none";
-statsDisplay.style.display = "none";
 
 setupForm.addEventListener("submit", startWorkout);
 repsForm.addEventListener("submit", endCurrentSet);
 
+function swapComponentVisibility(inComponent, outComponent) {
+  outComponent.className = "animated zoomOut";
+
+  setTimeout(function () {
+    outComponent.className = "hidden";
+    inComponent.className = "animated zoomIn";
+  }, 250);
+}
+
 function startWorkout(e) {
-  setupForm.style.display = "none";
-  repsForm.style.display = "initial";
+  swapComponentVisibility(repsForm, setupForm);
 
   e.preventDefault();
   exerciseType = document.getElementById("exercise-select").value;
@@ -67,8 +71,7 @@ function startWorkout(e) {
 }
 
 function endCurrentSet(e) {
-  repsForm.style.display = "none";
-  restTimerDisplay.style.display = "initial";
+  swapComponentVisibility(restTimerDisplay, repsForm);
 
   e.preventDefault();
   var repsInput = document.getElementById("reps-input");
@@ -84,8 +87,7 @@ function endCurrentSet(e) {
     currentSet++;
     startNextSet();
   } else {
-    repsForm.style.display = "none";
-    statsDisplay.style.display = "initial";
+    swapComponentVisibility(statsDisplay, repsForm);
 
     todaysWorkout.totalTime = Date.now() - todaysWorkout.date;
     workoutData.push(todaysWorkout);
@@ -95,17 +97,11 @@ function endCurrentSet(e) {
 
 function startNextSet() {
   startCountdown(currentExercise.time);
-  exerciseStartTime = Date.now();
   currentExercise = {
     set: currentSet,
     reps: null,
     time: null
   };
-}
-
-function swapTimerAndReps() {
-  restTimerDisplay.style.display = "none";
-  repsForm.style.display = "initial";
 }
 
 function startCountdown(time) {
@@ -118,6 +114,9 @@ function startCountdown(time) {
   },
   function() {
     restTimer.setText("Start next set!");
-    setTimeout(swapTimerAndReps, 5000);
+    exerciseStartTime = Date.now();
+    setTimeout(function () {
+      swapComponentVisibility(repsForm, restTimerDisplay);
+    }, 3000);
   });
 }
