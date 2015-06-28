@@ -96,13 +96,13 @@ function endCurrentSet(e) {
   repsInput.value = "";
 
   if (currentSet < numberOfSets) {
-    primaryInfo.textContent = "Set " + currentSet + " Complete";
-    secondaryInfo.textContent = "You did " + currentExercise.reps + " " + exerciseType + " in " + (currentExercise.time / 1000).toFixed(1) + " seconds.";
+    primaryInfo.textContent = "Rest Time";
+    secondaryInfo.textContent = "Set " + currentSet + " Summary: You did " + currentExercise.reps + " " + exerciseType + " in " + (currentExercise.time / 1000).toFixed(0) + " seconds.";
 
     currentSet++;
     startNextSet();
   } else {
-    primaryInfo.textContent = "Workout Complete";
+    primaryInfo.textContent = "All Done";
     secondaryInfo.textContent = "Here are today's stats.";
 
     generateStats();
@@ -151,5 +151,12 @@ function startCountdown(time) {
 }
 
 function generateStats() {
+  todaysWorkout.exercises.forEach(function (set) {
+    var statDiv = document.createElement("div");
+    var generatedHTML = "<p>Set " + set.set + ": " + set.reps + " " + exerciseType + " in " +
+      (set.time / 1000).toFixed(0) + " seconds.</p>";
 
+    statDiv.innerHTML = generatedHTML;
+    statsDisplay.appendChild(statDiv);
+  });
 }
