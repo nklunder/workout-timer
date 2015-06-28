@@ -1,6 +1,9 @@
 //all of the different display areas to be hidden / shown throughout workout
-var setupForm = document.getElementById("setup-form"),
+var primaryInfo = document.getElementById("primary-info"),
+  secondaryInfo = document.getElementById("secondary-info"),
+  setupForm = document.getElementById("setup-form"),
   repsForm = document.getElementById("reps-form"),
+  repsInput = document.getElementById("reps-input"),
   restTimerDisplay = document.getElementById("rest-timer-display"),
   statsDisplay = document.getElementById("stats-display");
 
@@ -24,17 +27,16 @@ if (!localStorage.workoutData) {
 }
 var workoutData = JSON.parse(localStorage.getItem("workoutData"));
 
-var restTimer = new ProgressBar.Circle("#countdown-display", {
-  color: '#FCB03C',
+var restTimer = new ProgressBar.Circle("#progressbar-display", {
+  color: '#512DA8',
   strokeWidth: 4,
-  trailColor: "#C1C1C1",
+  trailColor: "#B6B6B6",
   trailWidth: 4,
   text: {
+    color: "#212121",
     value: '0'
   }
 });
-
-// initially hide everything but the first module
 
 setupForm.addEventListener("submit", startWorkout);
 repsForm.addEventListener("submit", endCurrentSet);
@@ -44,12 +46,12 @@ function swapComponentVisibility(inComponent, outComponent) {
 
   setTimeout(function () {
     outComponent.className = "hidden";
-    inComponent.className = "animated zoomIn";
+    inComponent.className = "animated fadeInUp";
   }, 250);
 }
 
 function startWorkout(e) {
-  swapComponentVisibility(repsForm, setupForm);
+  swapComponentVisibility(restTimerDisplay, setupForm);
 
   e.preventDefault();
   exerciseType = document.getElementById("exercise-select").value;
@@ -67,14 +69,24 @@ function startWorkout(e) {
     reps: null,
     time: null
   };
-  exerciseStartTime = Date.now();
+
+  startNextSet(5000);
+
+  primaryInfo.textContent = "Get Ready";
+  secondaryInfo.textContent = "Start your first set when the timer reaches 0.";
+
+  // primaryInfo.textContent = "Set " + currentSet + " Total";
+  // secondaryInfo.textContent = "Enter the number of repetitions performed during your first set.";
 }
 
 function endCurrentSet(e) {
-  swapComponentVisibility(restTimerDisplay, repsForm);
+  if (currentSet < numberOfSets) {
+    swapComponentVisibility(restTimerDisplay, repsForm);
+  } else {
+    swapComponentVisibility(statsDisplay, repsForm);
+  }
 
   e.preventDefault();
-  var repsInput = document.getElementById("reps-input");
 
   exerciseEndTime = Date.now();
   currentExercise.reps = parseInt(repsInput.value);
@@ -84,10 +96,16 @@ function endCurrentSet(e) {
   repsInput.value = "";
 
   if (currentSet < numberOfSets) {
+    primaryInfo.textContent = "Set " + currentSet + " Complete";
+    secondaryInfo.textContent = "You did " + currentExercise.reps + " " + exerciseType + " in " + (currentExercise.time / 1000).toFixed(1) + " seconds.";
+
     currentSet++;
     startNextSet();
   } else {
-    swapComponentVisibility(statsDisplay, repsForm);
+    primaryInfo.textContent = "Workout Complete";
+    secondaryInfo.textContent = "Here are today's stats.";
+
+    generateStats();
 
     todaysWorkout.totalTime = Date.now() - todaysWorkout.date;
     workoutData.push(todaysWorkout);
@@ -95,8 +113,9 @@ function endCurrentSet(e) {
   }
 }
 
-function startNextSet() {
-  startCountdown(currentExercise.time);
+function startNextSet(timeOverride) {
+  startCountdown(timeOverride || currentExercise.time);
+
   currentExercise = {
     set: currentSet,
     reps: null,
@@ -108,15 +127,29 @@ function startCountdown(time) {
   restTimer.set(1);
   restTimer.animate(0, {
     duration: time,
+    from: { color: "#512DA8"},
+    to: { color: "#03A9F4"},
     step: function(state, bar) {
-      bar.setText((bar.value() * (this.duration / 1000)).toFixed(0));
+      restTimer.path.setAttribute("stroke", state.color);
+      bar.setText(Math.ceil(bar.value() * (this.duration / 1000)).toFixed(0));
     }
   },
   function() {
-    restTimer.setText("Start next set!");
+    if (currentSet === 1) {
+      restTimer.setText("GO!");
+    } else {
+      restTimer.setText("Start Next Set!");
+    }
     exerciseStartTime = Date.now();
     setTimeout(function () {
+      primaryInfo.textContent = "Set " + currentSet + " Total";
+      secondaryInfo.textContent = "Enter the number of " + exerciseType + " performed during set " + currentSet + ".";
       swapComponentVisibility(repsForm, restTimerDisplay);
+      repsInput.focus();
     }, 3000);
   });
+}
+
+function generateStats() {
+
 }
