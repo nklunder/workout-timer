@@ -118,6 +118,7 @@ function startNextSet(timeOverride) {
 
   currentExercise = {
     set: currentSet,
+    type: exerciseType,
     reps: null,
     time: null
   };
@@ -153,7 +154,7 @@ function startCountdown(time) {
 function generateStats() {
   todaysWorkout.exercises.forEach(function (set) {
     var statDiv = document.createElement("div");
-    var generatedHTML = "<p>Set " + set.set + ": " + set.reps + " " + exerciseType + " in " +
+    var generatedHTML = "<p>Set " + set.set + ": " + set.reps + " " + set.type + " in " +
       (set.time / 1000).toFixed(0) + " seconds.</p>";
 
     statDiv.innerHTML = generatedHTML;
