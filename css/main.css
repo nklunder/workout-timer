@@ -62,7 +62,7 @@ input[type="submit"]:hover {
 
 .btn-begin {
   display: block;
-  margin-top: 2.5rem;
+  margin-top: 4rem;
 }
 
 input[type="number"] {
@@ -85,6 +85,7 @@ input[type="number"] {
   border: 0;
 }
 .sets-select ul {
+  margin: 1rem 0 0;
   padding: 0;
 }
 .radio-group li {
