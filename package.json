@@ -1,0 +1,16 @@
+{
+  "name": "just-for-hunks",
+  "version": "0.1.0",
+  "description": "A simple exercise timer and recorder",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nklunder/workout-timer.git"
+  },
+  "author": "Nick Klunder",
+  "license": "ISC",
+  "devDependencies": {
+    "cssnext": "^1.8.0",
+    "gulp": "^3.9.0",
+    "gulp-postcss": "^5.1.9"
+  }
+}
